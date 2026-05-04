@@ -1,0 +1,34 @@
+stages:
+  prepare_data:
+    cmd: python preparing_data.py
+    deps:
+      - preparing_data.py
+      - data/raw
+    outs:
+      - data/processed/metadata.json
+
+  get_segments:
+    cmd: python get_segments.py
+    deps:
+      - get_segments.py
+      - data/processed/metadata.json
+    outs:
+      - data/processed/segments.npy
+
+  embed:
+    cmd: python embed.py
+    deps:
+      - embed.py
+      - data/processed/segments.npy
+    outs:
+      - data/processed/embeddings.npy
+
+  evaluate_and_visualize:
+    cmd: python visualization.py
+    deps:
+      - visualization.py
+      - data/processed/embeddings.npy
+    outs:
+      - data/processed/precision_comparison_plot.png
+      - data/processed/plot_float64.png
+      - data/processed/plot_int8.png
